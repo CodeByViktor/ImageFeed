@@ -38,6 +38,13 @@ class ImagesListViewController: UIViewController {
         
         let likeImage = indexPath.row % 2 == 0 ? UIImage(named: "Active") : UIImage(named: "Not active")
         cell.likeButton.setImage(likeImage, for: .normal)
+        
+        cell.gradient.frame = cell.bgLabel.bounds
+        cell.gradient.colors = cell.gradientColors
+        cell.gradient.locations = [0, 1]
+        cell.gradient.startPoint = CGPoint(x: 0.25, y: 0.5)
+        cell.gradient.endPoint = CGPoint(x: 0.75, y: 0.5)
+        cell.bgLabel.layer.addSublayer(cell.gradient)
     }
 }
 
