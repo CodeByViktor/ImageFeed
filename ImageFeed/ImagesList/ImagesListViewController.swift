@@ -36,7 +36,7 @@ class ImagesListViewController: UIViewController {
         cell.bgImage.image = image
         cell.dateLabel.text = dateFormatter.string(from: Date())
         
-        let likeImage = indexPath.row % 2 == 0 ? UIImage(named: "Active") : UIImage(named: "Not active")
+        let likeImage = indexPath.row % 2 == 0 ? UIImage(named: "Active") : UIImage(named: "No Active")
         cell.likeButton.setImage(likeImage, for: .normal)
         
         cell.gradient.frame = cell.bgLabel.bounds
