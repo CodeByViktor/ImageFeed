@@ -9,8 +9,8 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
-        let avatarImage = UIImage(named: "Photo")
         let avatarView = UIImageView()
+        let avatarImage = UIImage(named: "Photo")
         avatarView.image = avatarImage
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         

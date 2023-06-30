@@ -8,7 +8,7 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
-    var image: UIImage! {
+    var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
             imageView.image = image
@@ -30,7 +30,6 @@ final class SingleImageViewController: UIViewController {
     }
     @IBAction func didTapShareButton(_ sender: UIButton) {
         let sharingController = UIActivityViewController(activityItems: [image!], applicationActivities: nil)
-        //sharingController.popoverPresentationController?.sourceView = self.view
         self.present(sharingController, animated: true)
     }
     @IBAction func didTabBackButton(_ sender: Any) {
@@ -39,7 +38,8 @@ final class SingleImageViewController: UIViewController {
 }
 
 extension SingleImageViewController {
-    private func rescaleAndCenterImageInScrollView(image: UIImage) {
+    private func rescaleAndCenterImageInScrollView(image: UIImage?) {
+        guard let image = image else { return }
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
         view.layoutIfNeeded()
@@ -57,6 +57,7 @@ extension SingleImageViewController {
     }
 }
 
+//MARK: - UIScrollViewDelegate
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
