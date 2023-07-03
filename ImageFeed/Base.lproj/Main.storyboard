@@ -40,19 +40,27 @@
                                     <action selector="didTapBackButton:" destination="Elt-6b-LQz" eventType="touchUpInside" id="1QI-Rq-cxR"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="kH5-IX-GPU">
+                                <rect key="frame" x="0.0" y="63.333333333333343" width="393" height="4"/>
+                                <color key="progressTintColor" name="YP Black"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="WyA-dy-miM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="kJs-9y-UpJ" secondAttribute="trailing" id="6fZ-uE-x5V"/>
                             <constraint firstItem="JIJ-a9-kmp" firstAttribute="leading" secondItem="98M-oh-Yyl" secondAttribute="leading" constant="9" id="86E-jg-A6I"/>
+                            <constraint firstAttribute="trailing" secondItem="kH5-IX-GPU" secondAttribute="trailing" id="K6j-1S-cw7"/>
                             <constraint firstAttribute="bottom" secondItem="kJs-9y-UpJ" secondAttribute="bottom" id="MaO-TD-sgG"/>
                             <constraint firstItem="kJs-9y-UpJ" firstAttribute="leading" secondItem="98M-oh-Yyl" secondAttribute="leading" id="TTL-EK-Bd3"/>
                             <constraint firstItem="kJs-9y-UpJ" firstAttribute="top" secondItem="98M-oh-Yyl" secondAttribute="top" id="bfW-5K-3a0"/>
+                            <constraint firstItem="kH5-IX-GPU" firstAttribute="top" secondItem="JIJ-a9-kmp" secondAttribute="bottom" id="ppN-gp-Esr"/>
+                            <constraint firstItem="kH5-IX-GPU" firstAttribute="leading" secondItem="98M-oh-Yyl" secondAttribute="leading" id="tMl-pF-VR4"/>
                             <constraint firstItem="JIJ-a9-kmp" firstAttribute="top" secondItem="98M-oh-Yyl" secondAttribute="top" constant="29" id="xGA-9D-KDz"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="progressView" destination="kH5-IX-GPU" id="hFo-OI-l8T"/>
                         <outlet property="webView" destination="kJs-9y-UpJ" id="j9I-CX-ZlX"/>
                     </connections>
                 </viewController>
