@@ -22,6 +22,8 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         webView.navigationDelegate = self
         
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+        
         var urlComponents = URLComponents(string: AuthUrl)!
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: AccessKey),
@@ -34,6 +36,19 @@ final class WebViewViewController: UIViewController {
         let request = URLRequest(url: url)
         
         webView.load(request)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == #keyPath(WKWebView.estimatedProgress) {
+            updateProgress()
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+    
+    private func updateProgress() {
+        progressView.progress = Float(webView.estimatedProgress)
+        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
