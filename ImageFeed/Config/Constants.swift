@@ -7,7 +7,7 @@
 
 import Foundation
 
-let DefaultBaseURL = URL(string: "https://api.unsplash.com")
+let DefaultBaseURL = URL(string: "https://api.unsplash.com")!
 let AuthUrl = "https://unsplash.com/oauth/authorize"
 let AccessKey = "HdOZmJg-AxkwrDC8rIePQPEREv2TE_bHvzhLeutLaCM"
 let SecretKey = "aAYiGXVXzJ3ewkQyevhxBe9oiK5YgKaTqe_ec_aQwT4"
