@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB04D4C42A4F6BAF005ED0A6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB04D4C32A4F6BAF005ED0A6 /* Constants.swift */; };
 		AB5D813B2A23C84700C44E26 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5D813A2A23C84700C44E26 /* AppDelegate.swift */; };
 		AB5D813D2A23C84700C44E26 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5D813C2A23C84700C44E26 /* SceneDelegate.swift */; };
 		AB5D813F2A23C84700C44E26 /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5D813E2A23C84700C44E26 /* ImagesListViewController.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB04D4C32A4F6BAF005ED0A6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		AB5D81372A23C84700C44E26 /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB5D813A2A23C84700C44E26 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB5D813C2A23C84700C44E26 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -43,6 +45,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB04D4C22A4F6B90005ED0A6 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				AB04D4C32A4F6BAF005ED0A6 /* Constants.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		AB5D812E2A23C84700C44E26 = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +72,7 @@
 		AB5D81392A23C84700C44E26 /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
+				AB04D4C22A4F6B90005ED0A6 /* Config */,
 				AB5D91D32A33C0B200112AE9 /* Profile */,
 				AB5D813A2A23C84700C44E26 /* AppDelegate.swift */,
 				AB5D813C2A23C84700C44E26 /* SceneDelegate.swift */,
@@ -167,6 +178,7 @@
 				AB5D81712A240DB000C44E26 /* ImagesListCell.swift in Sources */,
 				AB5D91D52A33C0C300112AE9 /* ProfileViewController.swift in Sources */,
 				AB5D813B2A23C84700C44E26 /* AppDelegate.swift in Sources */,
+				AB04D4C42A4F6BAF005ED0A6 /* Constants.swift in Sources */,
 				AB5D91D82A33DE3300112AE9 /* SingleImageViewController.swift in Sources */,
 				AB5D813D2A23C84700C44E26 /* SceneDelegate.swift in Sources */,
 			);
