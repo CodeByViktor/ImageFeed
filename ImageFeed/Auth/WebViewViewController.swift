@@ -28,6 +28,8 @@ final class WebViewViewController: UIViewController {
         webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
     }
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         webView.navigationDelegate = self
         
         var urlComponents = URLComponents(string: AuthUrl)!

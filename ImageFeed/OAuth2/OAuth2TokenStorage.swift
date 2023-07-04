@@ -16,4 +16,9 @@ final class OAuth2TokenStorage {
             UserDefaults.standard.setValue(newValue, forKey: "token")
         }
     }
+    
+    //MARK: reset auth
+    func resetToken() {
+        UserDefaults.standard.removeObject(forKey: "token")
+    }
 }
