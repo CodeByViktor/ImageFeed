@@ -8,43 +8,68 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    override func viewDidLoad() {
-        let avatarView = UIImageView()
+    private let avatarView = {
+        let view = UIImageView()
         let avatarImage = UIImage(named: "Photo")
-        avatarView.image = avatarImage
-        avatarView.translatesAutoresizingMaskIntoConstraints = false
-        
+        view.image = avatarImage
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let exitButton = {
         let exitButtonImage = UIImage(systemName: "ipad.and.arrow.forward")
-        let exitButton = UIButton.systemButton(with: exitButtonImage!,
-                                               target: self,
-                                               action: #selector(logout))
-        exitButton.tintColor = UIColor(named: "YP Red")
-        exitButton.translatesAutoresizingMaskIntoConstraints = false
-        
+        let button = UIButton.systemButton(with: exitButtonImage!,
+                                           target: nil,
+                                           action: nil)
+        button.tintColor = UIColor(named: "YP Red")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private let nameLabel = {
         let nameLabel = UILabel()
         nameLabel.text = "Екатерина Новикова"
         nameLabel.font = UIFont.boldSystemFont(ofSize: 23)
         nameLabel.textColor = UIColor(named: "YP White")
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        return nameLabel
+    }()
+    
+    private let linkLabel = {
         let linkLabel = UILabel()
         linkLabel.text = "@ekaterina_nov"
         linkLabel.font = UIFont.systemFont(ofSize: 13)
         linkLabel.textColor = UIColor(named: "YP Grey")
         linkLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        return linkLabel
+    }()
+    
+    private let descLabel = {
         let descLabel = UILabel()
         descLabel.text = "Hello, world!"
         descLabel.font = UIFont.systemFont(ofSize: 13)
         descLabel.textColor = UIColor(named: "YP White")
         descLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        return descLabel
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        exitButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
+        addSubViews()
+        applyConstraints()
+    }
+    
+    private func addSubViews() {
         view.addSubview(avatarView)
         view.addSubview(exitButton)
         view.addSubview(nameLabel)
         view.addSubview(linkLabel)
         view.addSubview(descLabel)
-        
+    }
+    
+    private func applyConstraints() {
         NSLayoutConstraint.activate([
             avatarView.widthAnchor.constraint(equalToConstant: 70),
             avatarView.heightAnchor.constraint(equalToConstant: 70),
@@ -65,5 +90,6 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func logout(_ sender: Any) {
+        OAuth2TokenStorage().resetToken()
     }
 }
