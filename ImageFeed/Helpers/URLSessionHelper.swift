@@ -39,7 +39,7 @@ extension URLSession {
                 fulfillCompletion(.failure(NetworkError.urlSessionError))
             }
         }
-        task.resume()
+        //task.resume()
         return task
     }
 }
