@@ -31,6 +31,8 @@ protocol ProfileImageServiceProtocol {
 }
 
 final class ProfileViewController: UIViewController {
+    private let profileService: ProfileServiceProtocol = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     private let avatarView = {
         let view = UIImageView()
         let avatarImage = UIImage(named: "Photo")
@@ -76,8 +78,6 @@ final class ProfileViewController: UIViewController {
         return descLabel
     }()
     
-    private let profileService: ProfileServiceProtocol = ProfileService.shared
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -87,12 +87,26 @@ final class ProfileViewController: UIViewController {
         
         guard let profile = profileService.profile else { return }
         updateUI(with: profile)
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.DidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
     }
     
     private func updateUI(with profile: Profile) {
         nameLabel.text = profile.name
         linkLabel.text = profile.loginName
         descLabel.text = profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImage = ProfileImageService.shared.avatarURL,
+            let imageURL = URL(string: profileImage)
+        else { return }
+        
     }
     
     private func addSubViews() {

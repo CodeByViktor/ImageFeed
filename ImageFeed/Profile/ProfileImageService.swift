@@ -28,6 +28,7 @@ struct UserResult: Decodable {
 
 final class ProfileImageService: ProfileImageServiceProtocol {
     static let shared = ProfileImageService()
+    static let DidChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
     private(set) var avatarURL: String?
     private var activeTask: URLSessionTask?
@@ -47,6 +48,9 @@ final class ProfileImageService: ProfileImageServiceProtocol {
                 guard let decodedProfileImage = decodedProfileImage?.smallImage else { return }
                 self.avatarURL = decodedProfileImage
                 completion(.success(self.avatarURL!))
+                NotificationCenter.default.post(name: ProfileImageService.DidChangeNotification,
+                                                object: self,
+                                                userInfo: ["URL": self.avatarURL!])
                 break
             case .failure(let error):
                 completion(.failure(error))
