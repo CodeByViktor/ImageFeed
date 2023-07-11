@@ -106,7 +106,18 @@ final class ProfileViewController: UIViewController {
             let profileImage = ProfileImageService.shared.avatarURL,
             let imageURL = URL(string: profileImage)
         else { return }
-        
+        DispatchQueue.global().async {
+            do {
+                let imageData = try Data(contentsOf: imageURL)
+                let image = UIImage(data: imageData)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.avatarView.image = image
+                }
+            } catch {
+                return
+            }
+        }
     }
     
     private func addSubViews() {
@@ -138,6 +149,6 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func logout(_ sender: Any) {
-        OAuth2TokenStorage().resetToken()
+        OAuth2TokenStorage.shared.resetToken()
     }
 }

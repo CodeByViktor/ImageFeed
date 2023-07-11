@@ -37,16 +37,14 @@ final class ProfileImageService: ProfileImageServiceProtocol {
         assert(Thread.isMainThread)
         activeTask?.cancel()
         
-        guard let token = OAuth2Service().authToken else { return }
+        guard let token = OAuth2Service.shared.authToken else { return }
         var request = URLRequest.makeHTTPRequest(path: "/users/\(username)")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let data):
-                let decodedProfileImage = try? JSONDecoder().decode(UserResult.self, from: data)
-                guard let decodedProfileImage = decodedProfileImage?.smallImage else { return }
-                self.avatarURL = decodedProfileImage
+            case .success(let userResult):
+                self.avatarURL = userResult.smallImage
                 completion(.success(self.avatarURL!))
                 NotificationCenter.default.post(name: ProfileImageService.DidChangeNotification,
                                                 object: self,
@@ -56,6 +54,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
                 completion(.failure(error))
                 break
             }
+            activeTask = nil
         }
         activeTask = task
         task.resume()

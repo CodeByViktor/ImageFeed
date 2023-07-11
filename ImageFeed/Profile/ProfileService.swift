@@ -33,19 +33,19 @@ final class ProfileService: ProfileServiceProtocol {
         
         var request = URLRequest.makeHTTPRequest(path: "/me")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let data):
-                let decodedProfile = try? JSONDecoder().decode(ProfileResult.self, from: data)
-                guard let decodedProfile = decodedProfile else { return }
-                self.profile = self.makeProfileStruct(from: decodedProfile)
+            case .success(let profile):
+                self.profile = self.makeProfileStruct(from: profile)
                 completion(.success(self.profile!))
                 break
             case .failure(let error):
+                completion(.failure(error))
                 
                 break
             }
+            activeTask = nil
         }
         activeTask = task
         task.resume()
