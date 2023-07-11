@@ -7,6 +7,29 @@
 
 import UIKit
 
+struct Profile {
+    let username: String?
+    var loginName: String {
+        "@\(username ?? "")"
+    }
+    let firstName: String?
+    let lastName: String?
+    var name: String? {
+        "\(firstName ?? "") \(lastName ?? "")"
+    }
+    let bio: String?
+}
+
+protocol ProfileServiceProtocol {
+    var profile: Profile? { get }
+    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> ())
+}
+
+protocol ProfileImageServiceProtocol {
+    var avatarURL: String? { get }
+    func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> ())
+}
+
 final class ProfileViewController: UIViewController {
     private let avatarView = {
         let view = UIImageView()
@@ -53,12 +76,23 @@ final class ProfileViewController: UIViewController {
         return descLabel
     }()
     
+    private let profileService: ProfileServiceProtocol = ProfileService.shared
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         exitButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
         addSubViews()
         applyConstraints()
+        
+        guard let profile = profileService.profile else { return }
+        updateUI(with: profile)
+    }
+    
+    private func updateUI(with profile: Profile) {
+        nameLabel.text = profile.name
+        linkLabel.text = profile.loginName
+        descLabel.text = profile.bio
     }
     
     private func addSubViews() {

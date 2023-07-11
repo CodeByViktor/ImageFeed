@@ -10,11 +10,14 @@ import UIKit
 final class SplashScreenViewController: UIViewController {
     let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     
+    private let profileService: ProfileServiceProtocol = ProfileService.shared
+    private let profileImageService: ProfileImageServiceProtocol = ProfileImageService.shared
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         if let token = OAuth2TokenStorage().token {
-            switchToTabBarController()
+            fetchProfile(token: token)
         } else {
             performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
         }
@@ -54,12 +57,26 @@ extension SplashScreenViewController: AuthViewControllerDelegate {
         OAuth2Service.shared.fetchOAuthToken(code) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success:
+            case .success(let token):
+                self.fetchProfile(token: token)
+            case .failure(let error):
+                break
+            }
+        }
+    }
+    
+    private func fetchProfile(token: String) {
+        profileService.fetchProfile(token) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let profile):
                 self.dismiss(animated: true) {
+                    self.profileImageService.fetchProfileImageURL(username: profile.username!) { _ in }
                     UIBlockingProgressHUD.hide()
                     self.switchToTabBarController()
                 }
-            case .failure:
+                break
+            case .failure(let error):
                 break
             }
         }
