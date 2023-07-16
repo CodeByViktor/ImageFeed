@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 struct Profile {
     let username: String?
@@ -106,18 +107,10 @@ final class ProfileViewController: UIViewController {
             let profileImage = ProfileImageService.shared.avatarURL,
             let imageURL = URL(string: profileImage)
         else { return }
-        DispatchQueue.global().async {
-            do {
-                let imageData = try Data(contentsOf: imageURL)
-                let image = UIImage(data: imageData)
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.avatarView.image = image
-                }
-            } catch {
-                return
-            }
-        }
+        let imageProcessor = RoundCornerImageProcessor(cornerRadius: 60)
+        avatarView.kf.setImage(with: imageURL,
+                               placeholder: UIImage(named: "person.crop.circle.fill"),
+                               options: [.processor(imageProcessor)])
     }
     
     private func addSubViews() {
