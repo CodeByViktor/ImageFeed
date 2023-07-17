@@ -8,6 +8,7 @@
 import UIKit
 import Kingfisher
 
+//MARK: Structs
 struct Profile {
     let username: String?
     var loginName: String {
@@ -21,6 +22,7 @@ struct Profile {
     let bio: String?
 }
 
+//MARK: Protocols
 protocol ProfileServiceProtocol {
     var profile: Profile? { get }
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> ())
@@ -31,6 +33,8 @@ protocol ProfileImageServiceProtocol {
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> ())
 }
 
+
+//MARK: Class
 final class ProfileViewController: UIViewController {
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -81,6 +85,8 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(named: "YP Black")
 
         exitButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
         addSubViews()

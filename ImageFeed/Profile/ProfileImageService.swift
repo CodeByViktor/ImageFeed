@@ -12,7 +12,6 @@ struct UserResult: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case profileImage = "profile_image"
-        
         enum SmallImageKeys: String, CodingKey {
             case smallImage = "small"
         }
@@ -20,7 +19,6 @@ struct UserResult: Decodable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        //self.profileImage = try container.decodeIfPresent(String.self, forKey: .profileImage)
         let smallImageContainer = try container.nestedContainer(keyedBy: CodingKeys.SmallImageKeys.self, forKey: .profileImage)
         smallImage = try smallImageContainer.decode(String.self, forKey: .smallImage)
     }

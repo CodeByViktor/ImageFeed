@@ -10,6 +10,14 @@ import UIKit
 final class SplashScreenViewController: UIViewController {
     let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     
+    // MARK: UI el
+    private let logoImageView = {
+        let view = UIImageView(image: UIImage(named: "Vector"))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    // ---
+    
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     private let profileImageService: ProfileImageServiceProtocol = ProfileImageService.shared
     
@@ -19,7 +27,11 @@ final class SplashScreenViewController: UIViewController {
         if let token = OAuth2TokenStorage.shared.token {
             fetchProfile(token: token)
         } else {
-            performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
+            let storyboard = UIStoryboard(name: "Main", bundle: .main)
+            let authController = storyboard.instantiateViewController(identifier: "AuthViewController") as! AuthViewController
+            authController.delegate = self
+            authController.modalPresentationStyle = .fullScreen
+            present(authController, animated: true)
         }
     }
     
@@ -31,18 +43,7 @@ final class SplashScreenViewController: UIViewController {
     }
 }
 
-extension SplashScreenViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowAuthenticationScreenSegueIdentifier {
-            guard let navController = segue.destination as? UINavigationController,
-                  let viewController = navController.viewControllers[0] as? AuthViewController
-            else { fatalError("Failed to prepare for \(ShowAuthenticationScreenSegueIdentifier)") }
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-    
+extension SplashScreenViewController {    
     private func showError() {
         let alert = UIAlertController(
             title: "Что-то пошло не так(",
@@ -55,6 +56,19 @@ extension SplashScreenViewController {
         alert.addAction(action)
         
         present(alert, animated: true, completion: nil)
+    }
+}
+
+//MARK: UI
+extension SplashScreenViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor(named: "YP Black")
+        view.addSubview(logoImageView)
+        NSLayoutConstraint.activate([
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 }
 

@@ -139,6 +139,7 @@
 		AB5D81392A23C84700C44E26 /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
+				ABAAA6712A64CC3A006A0643 /* TabBar */,
 				AB3B896E2A5335F6001CB768 /* SplashScreen */,
 				AB3B89672A531506001CB768 /* OAuth2 */,
 				AB3B89622A5310E0001CB768 /* Helpers */,
@@ -152,7 +153,6 @@
 				AB5D81432A23C84800C44E26 /* Assets.xcassets */,
 				AB5D81452A23C84800C44E26 /* LaunchScreen.storyboard */,
 				AB5D81482A23C84800C44E26 /* Info.plist */,
-				ABAAA66F2A64B152006A0643 /* TabBarController.swift */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -175,6 +175,14 @@
 				ABAAA6672A5DB9FC006A0643 /* ProfileImageService.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		ABAAA6712A64CC3A006A0643 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				ABAAA66F2A64B152006A0643 /* TabBarController.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,7 +360,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -406,7 +414,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
