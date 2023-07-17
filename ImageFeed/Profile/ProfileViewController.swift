@@ -38,10 +38,10 @@ protocol ProfileImageServiceProtocol {
 final class ProfileViewController: UIViewController {
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    
+    // MARK: UI el
     private let avatarView = {
-        let view = UIImageView()
-        let avatarImage = UIImage(named: "Photo")
-        view.image = avatarImage
+        let view = UIImageView(image: UIImage(named: "person.crop.circle.fill"))
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -82,6 +82,7 @@ final class ProfileViewController: UIViewController {
         descLabel.translatesAutoresizingMaskIntoConstraints = false
         return descLabel
     }()
+    //------
     
     override func viewDidLoad() {
         super.viewDidLoad()
