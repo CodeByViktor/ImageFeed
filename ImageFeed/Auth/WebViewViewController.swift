@@ -33,8 +33,14 @@ final class WebViewViewController: UIViewController {
     weak var delegate: WebViewViewControllerDelegate?
     private var estimatedProgressObservation: NSKeyValueObservation?
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        view.backgroundColor = .ypWhite
         view.addPositioned(webView)
         view.addPositioned(backButton, topFromSafeArea: true, top: 9, left: 9, bottom: nil, right: nil, w: 24, h: 24)
         view.addSubview(progressView)

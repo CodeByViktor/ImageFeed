@@ -11,7 +11,7 @@ protocol AuthViewControllerDelegate: AnyObject {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
-final class AuthViewController: UIViewController {
+final class AuthViewController: BaseViewController {
     weak var delegate: AuthViewControllerDelegate?
     private let logoView = {
         let view = UIImageView(image: UIImage(named: "Logo_of_Unsplash"))
@@ -31,6 +31,7 @@ final class AuthViewController: UIViewController {
 extension AuthViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = UIColor(named: "YP Black")
         addSubviews()
         

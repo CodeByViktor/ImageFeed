@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImagesListViewController: UIViewController {
+class ImagesListViewController: BaseViewController {
 
     private let tableView = {
         let tableView = UITableView()

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SplashScreenViewController: UIViewController {
+final class SplashScreenViewController: BaseViewController {
     // MARK: UI el
     private let logoImageView = {
         let logoView = UIImageView(image: UIImage(named: "Vector"))

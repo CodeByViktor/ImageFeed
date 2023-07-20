@@ -35,7 +35,7 @@ protocol ProfileImageServiceProtocol {
 
 
 //MARK: Class
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: BaseViewController {
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     

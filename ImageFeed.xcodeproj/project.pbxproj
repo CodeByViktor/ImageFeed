@@ -33,6 +33,7 @@
 		ABAAA6702A64B152006A0643 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAAA66F2A64B152006A0643 /* TabBarController.swift */; };
 		ABAAA6762A65E64F006A0643 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAAA6752A65E64F006A0643 /* UIView.swift */; };
 		ABAAA6782A66C6FF006A0643 /* UIColor+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAAA6772A66C6FF006A0643 /* UIColor+Extention.swift */; };
+		ABAAA67C2A68C1CA006A0643 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAAA67B2A68C1CA006A0643 /* BaseUIViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		ABAAA66F2A64B152006A0643 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		ABAAA6752A65E64F006A0643 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		ABAAA6772A66C6FF006A0643 /* UIColor+Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extention.swift"; sourceTree = "<group>"; };
+		ABAAA67B2A68C1CA006A0643 /* BaseUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUIViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,16 +145,17 @@
 		AB5D81392A23C84700C44E26 /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
-				ABAAA6712A64CC3A006A0643 /* TabBar */,
+				AB04D4C22A4F6B90005ED0A6 /* Config */,
+				ABAAA67D2A68C2FC006A0643 /* BaseUIViewController */,
 				AB3B896E2A5335F6001CB768 /* SplashScreen */,
+				AB3B895D2A52DBA0001CB768 /* Auth */,
+				ABAAA6712A64CC3A006A0643 /* TabBar */,
+				AB5D81732A240E0D00C44E26 /* ImagesList */,
+				AB5D91D32A33C0B200112AE9 /* Profile */,
 				AB3B89672A531506001CB768 /* OAuth2 */,
 				AB3B89622A5310E0001CB768 /* Helpers */,
-				AB3B895D2A52DBA0001CB768 /* Auth */,
-				AB04D4C22A4F6B90005ED0A6 /* Config */,
-				AB5D91D32A33C0B200112AE9 /* Profile */,
 				AB5D813A2A23C84700C44E26 /* AppDelegate.swift */,
 				AB5D813C2A23C84700C44E26 /* SceneDelegate.swift */,
-				AB5D81732A240E0D00C44E26 /* ImagesList */,
 				AB5D81432A23C84800C44E26 /* Assets.xcassets */,
 				AB5D81452A23C84800C44E26 /* LaunchScreen.storyboard */,
 				AB5D81482A23C84800C44E26 /* Info.plist */,
@@ -186,6 +189,14 @@
 				ABAAA66F2A64B152006A0643 /* TabBarController.swift */,
 			);
 			path = TabBar;
+			sourceTree = "<group>";
+		};
+		ABAAA67D2A68C2FC006A0643 /* BaseUIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				ABAAA67B2A68C1CA006A0643 /* BaseUIViewController.swift */,
+			);
+			path = BaseUIViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +282,7 @@
 				ABAAA6762A65E64F006A0643 /* UIView.swift in Sources */,
 				AB5D813F2A23C84700C44E26 /* ImagesListViewController.swift in Sources */,
 				AB3B89642A53111F001CB768 /* URLRequestHelper.swift in Sources */,
+				ABAAA67C2A68C1CA006A0643 /* BaseUIViewController.swift in Sources */,
 				AB3B89692A531516001CB768 /* OAuth2Service.swift in Sources */,
 				ABAAA6642A5B8876006A0643 /* UIBlockingProgressHUD.swift in Sources */,
 				AB5D81712A240DB000C44E26 /* ImagesListCell.swift in Sources */,
