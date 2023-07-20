@@ -8,13 +8,10 @@
 import UIKit
 
 final class SplashScreenViewController: UIViewController {
-    let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
-    
     // MARK: UI el
     private let logoImageView = {
-        let view = UIImageView(image: UIImage(named: "Vector"))
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+        let logoView = UIImageView(image: UIImage(named: "Vector"))
+        return logoView
     }()
     // ---
     
@@ -27,8 +24,7 @@ final class SplashScreenViewController: UIViewController {
         if let token = OAuth2TokenStorage.shared.token {
             fetchProfile(token: token)
         } else {
-            let storyboard = UIStoryboard(name: "Main", bundle: .main)
-            let authController = storyboard.instantiateViewController(identifier: "AuthViewController") as! AuthViewController
+            let authController = AuthViewController()
             authController.delegate = self
             authController.modalPresentationStyle = .fullScreen
             present(authController, animated: true)
@@ -37,13 +33,13 @@ final class SplashScreenViewController: UIViewController {
     
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController")
+        let tabBarController = TabBarController()
         window.rootViewController = tabBarController
     }
 }
 
-extension SplashScreenViewController {    
+//MARK: Show errors
+extension SplashScreenViewController {
     private func showError() {
         let alert = UIAlertController(
             title: "Что-то пошло не так(",
@@ -64,11 +60,7 @@ extension SplashScreenViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "YP Black")
-        view.addSubview(logoImageView)
-        NSLayoutConstraint.activate([
-            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        view.addCentered(logoImageView)
     }
 }
 
@@ -105,7 +97,7 @@ extension SplashScreenViewController: AuthViewControllerDelegate {
                     self.switchToTabBarController()
                 }
                 break
-            case .failure(_):
+            case .failure:
                 self.showError()
                 break
             }

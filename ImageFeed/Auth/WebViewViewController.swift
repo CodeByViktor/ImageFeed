@@ -14,14 +14,36 @@ protocol WebViewViewControllerDelegate: AnyObject {
 }
 
 final class WebViewViewController: UIViewController {
-    @IBOutlet private var webView: WKWebView!
-    @IBOutlet private var progressView: UIProgressView!
+    private var webView = {
+        let webView = WKWebView()
+        return webView
+    }()
+    private var progressView = {
+        let progressView = UIProgressView()
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        return progressView
+    }()
+    private let backButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        button.tintColor = UIColor(named: "YP Black")
+        return button
+    }()
     
     weak var delegate: WebViewViewControllerDelegate?
     private var estimatedProgressObservation: NSKeyValueObservation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addPositioned(webView)
+        view.addPositioned(backButton, topFromSafeArea: true, top: 9, left: 9, bottom: nil, right: nil, w: 24, h: 24)
+        view.addSubview(progressView)
+        NSLayoutConstraint.activate([
+            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            progressView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 9)
+        ])
+        backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         
         estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [] ) { [weak self] _, _ in
             guard let self = self else { return }
@@ -63,7 +85,8 @@ final class WebViewViewController: UIViewController {
         return nil
     }
     
-    @IBAction private func didTapBackButton(_ sender: Any?) {
+    @objc
+    private func didTapBackButton() {
         delegate?.webViewViewControllerDidCancel(self)
     }
 }
