@@ -7,18 +7,10 @@
 
 import Foundation
 
-struct ProfileResult: Codable {
-    let userName: String?
-    let firstName: String?
-    let lastName: String?
-    let bio: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case userName = "username"
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case bio = "bio"
-    }
+//MARK: Protocols
+protocol ProfileServiceProtocol {
+    var profile: Profile? { get }
+    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> ())
 }
 
 final class ProfileService: ProfileServiceProtocol {
@@ -28,7 +20,6 @@ final class ProfileService: ProfileServiceProtocol {
     private var activeTask: URLSessionTask?
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> ()) {
-        assert(Thread.isMainThread)
         activeTask?.cancel()
         
         var request = URLRequest.makeHTTPRequest(path: "/me")
@@ -52,9 +43,6 @@ final class ProfileService: ProfileServiceProtocol {
     }
     
     private func makeProfileStruct(from profileResult: ProfileResult) -> Profile {
-        return Profile(username: profileResult.userName,
-                       firstName: profileResult.firstName,
-                       lastName: profileResult.lastName,
-                       bio: profileResult.bio)
+        return Profile(profileResult: profileResult)
     }
 }

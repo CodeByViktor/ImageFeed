@@ -27,9 +27,8 @@ final class OAuth2Service {
             _ code: String,
             completion: @escaping (Result<String, Error>) -> Void )
     {
-        assert(Thread.isMainThread)
         
-        if lastCode == code && activeTask != nil { return }
+        guard lastCode != code && activeTask == nil else { return }
         activeTask?.cancel()
         lastCode = code
         

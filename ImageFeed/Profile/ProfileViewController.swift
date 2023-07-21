@@ -8,31 +8,6 @@
 import UIKit
 import Kingfisher
 
-//MARK: Structs
-struct Profile {
-    let username: String?
-    var loginName: String {
-        "@\(username ?? "")"
-    }
-    let firstName: String?
-    let lastName: String?
-    var name: String? {
-        "\(firstName ?? "") \(lastName ?? "")"
-    }
-    let bio: String?
-}
-
-//MARK: Protocols
-protocol ProfileServiceProtocol {
-    var profile: Profile? { get }
-    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> ())
-}
-
-protocol ProfileImageServiceProtocol {
-    var avatarURL: String? { get }
-    func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> ())
-}
-
 
 //MARK: Class
 final class ProfileViewController: BaseViewController {

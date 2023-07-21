@@ -66,11 +66,8 @@ extension SplashScreenViewController {
 
 extension SplashScreenViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        //dismiss(animated: true) { [weak self] in
-            //guard let self = self else { return }
         UIBlockingProgressHUD.show()
-        self.fetchOAuthToken(code)
-        //}
+        fetchOAuthToken(code)
     }
     
     private func fetchOAuthToken(_ code: String) {
@@ -91,8 +88,9 @@ extension SplashScreenViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success(let profile):
-                self.dismiss(animated: true) {
-                    self.profileImageService.fetchProfileImageURL(username: profile.username!) { _ in }
+                self.dismiss(animated: true) { [weak self] in
+                    guard let self = self else {return}
+                    self.profileImageService.fetchProfileImageURL(username: profile.userName!) {_ in }
                     UIBlockingProgressHUD.hide()
                     self.switchToTabBarController()
                 }

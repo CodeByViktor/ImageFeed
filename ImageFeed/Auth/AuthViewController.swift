@@ -23,12 +23,11 @@ final class AuthViewController: BaseViewController {
         button.backgroundColor = UIColor(named: "YP White")
         button.setTitleColor(UIColor(named: "YP Black"), for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 16
         return button
     }()
-}
-
-//MARK: UI
-extension AuthViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,7 +53,6 @@ extension AuthViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        //vc.dismiss(animated: true)
         delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
     
