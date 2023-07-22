@@ -14,21 +14,47 @@ protocol WebViewViewControllerDelegate: AnyObject {
 }
 
 final class WebViewViewController: UIViewController {
-    @IBOutlet private var webView: WKWebView!
-    @IBOutlet private var progressView: UIProgressView!
+    private var webView = {
+        let webView = WKWebView()
+        return webView
+    }()
+    private var progressView = {
+        let progressView = UIProgressView()
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        return progressView
+    }()
+    private let backButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        button.tintColor = UIColor(named: "YP Black")
+        return button
+    }()
     
     weak var delegate: WebViewViewControllerDelegate?
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
-    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        view.backgroundColor = .ypWhite
+        view.addPositioned(webView)
+        view.addPositioned(backButton, topFromSafeArea: true, top: 9, left: 9, bottom: nil, right: nil, w: 24, h: 24)
+        view.addSubview(progressView)
+        NSLayoutConstraint.activate([
+            progressView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            progressView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 9)
+        ])
+        backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        
+        estimatedProgressObservation = webView.observe(\.estimatedProgress, options: [] ) { [weak self] _, _ in
+            guard let self = self else { return }
+            self.updateProgress()
+        }
         
         webView.navigationDelegate = self
         
@@ -45,14 +71,6 @@ final class WebViewViewController: UIViewController {
         
         webView.load(request)
         updateProgress()
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
     }
     
     private func updateProgress() {
@@ -73,7 +91,8 @@ final class WebViewViewController: UIViewController {
         return nil
     }
     
-    @IBAction private func didTapBackButton(_ sender: Any?) {
+    @objc
+    private func didTapBackButton() {
         delegate?.webViewViewControllerDidCancel(self)
     }
 }

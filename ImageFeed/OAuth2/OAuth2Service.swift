@@ -9,14 +9,17 @@ import Foundation
 
 final class OAuth2Service {
     static let shared = OAuth2Service()
-    let urlSession = URLSession.shared
+    private let urlSession = URLSession.shared
+    
+    private var lastCode: String?
+    private var activeTask: URLSessionTask?
     
     private (set) var authToken: String? {
         get {
-            OAuth2TokenStorage().token
+            OAuth2TokenStorage.shared.token
         }
         set {
-            OAuth2TokenStorage().token = newValue
+            OAuth2TokenStorage.shared.token = newValue
         }
     }
     
@@ -24,8 +27,13 @@ final class OAuth2Service {
             _ code: String,
             completion: @escaping (Result<String, Error>) -> Void )
     {
+        
+        guard lastCode != code && activeTask == nil else { return }
+        activeTask?.cancel()
+        lastCode = code
+        
         let request = authTokenRequest(code: code)
-        let task = object(for: request) { [weak self] result in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self = self else { return }
             switch result {
             case .success(let body):
@@ -34,23 +42,12 @@ final class OAuth2Service {
                 completion(.success(authToken))
             case .failure(let error):
                 completion(.failure(error))
-            } }
-        task.resume()
-    }
-    
-    private func object(
-            for request: URLRequest,
-            completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void
-    ) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
-            let response = result.flatMap { data -> Result<OAuthTokenResponseBody, Error> in
-                Result {
-                    try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                }
             }
-            completion(response)
+            activeTask = nil
+            lastCode = nil
         }
+        activeTask = task
+        task.resume()
     }
 }
 

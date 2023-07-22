@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SingleImageViewController: UIViewController {
+final class SingleImageViewController: BaseViewController {
     var image: UIImage? {
         didSet {
             guard isViewLoaded else { return }
@@ -16,24 +16,63 @@ final class SingleImageViewController: UIViewController {
         }
     }
     
-    @IBOutlet private weak var scrollView: UIScrollView!
-    @IBOutlet private var imageView: UIImageView!
+    private var scrollView = {
+        let scrollView = UIScrollView()
+        return scrollView
+    }()
+    private var imageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
+    private var backButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        button.tintColor = UIColor(named: "YP White")
+        return button
+    }()
+    private var shareButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "Sharing"), for: .normal)
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .ypBlack
+        
+        addSubViews()
+        
+        shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        
+        
+        scrollView.delegate = self
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         imageView.image = image
         
         rescaleAndCenterImageInScrollView(image: image)
-        
     }
-    @IBAction func didTapShareButton(_ sender: UIButton) {
+    private func addSubViews() {
+        view.addPositioned(scrollView)
+        view.addPositioned(backButton, topFromSafeArea: true, top: 8, left: 8, bottom: nil, right: nil, w: 24, h: 24)
+        scrollView.addPositioned(imageView)
+        view.addSubview(shareButton)
+        NSLayoutConstraint.activate([
+            shareButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            shareButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -51)
+        ])
+    }
+    
+    @objc
+    func didTapShareButton() {
         let sharingController = UIActivityViewController(activityItems: [image!], applicationActivities: nil)
         self.present(sharingController, animated: true)
     }
-    @IBAction func didTabBackButton(_ sender: Any) {
+    @objc
+    private func didTapBackButton() {
         dismiss(animated: true)
     }
 }

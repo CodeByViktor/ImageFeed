@@ -6,12 +6,17 @@
 //
 
 import UIKit
+import Kingfisher
 
-final class ProfileViewController: UIViewController {
+
+//MARK: Class
+final class ProfileViewController: BaseViewController {
+    private let profileService: ProfileServiceProtocol = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
+    // MARK: UI el
     private let avatarView = {
-        let view = UIImageView()
-        let avatarImage = UIImage(named: "Photo")
-        view.image = avatarImage
+        let view = UIImageView(image: UIImage(named: "person.crop.circle.fill"))
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -52,13 +57,42 @@ final class ProfileViewController: UIViewController {
         descLabel.translatesAutoresizingMaskIntoConstraints = false
         return descLabel
     }()
+    //------
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(named: "YP Black")
 
         exitButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
         addSubViews()
         applyConstraints()
+        
+        guard let profile = profileService.profile else { return }
+        updateUI(with: profile)
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.DidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
+    }
+    
+    private func updateUI(with profile: Profile) {
+        nameLabel.text = profile.name
+        linkLabel.text = profile.loginName
+        descLabel.text = profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImage = ProfileImageService.shared.avatarURL,
+            let imageURL = URL(string: profileImage)
+        else { return }
+        let imageProcessor = RoundCornerImageProcessor(cornerRadius: 60)
+        avatarView.kf.setImage(with: imageURL,
+                               placeholder: UIImage(named: "person.crop.circle.fill"),
+                               options: [.processor(imageProcessor)])
     }
     
     private func addSubViews() {
@@ -90,6 +124,6 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func logout(_ sender: Any) {
-        OAuth2TokenStorage().resetToken()
+        OAuth2TokenStorage.shared.resetToken()
     }
 }
