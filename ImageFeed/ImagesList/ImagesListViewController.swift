@@ -72,11 +72,10 @@ class ImagesListViewController: BaseViewController {
             case .failure: break
             }
         }
-
-        cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
         
-        let likeImage = indexPath.row % 2 == 0 ? UIImage(named: "Active") : UIImage(named: "No Active")
-        cell.likeButton.setImage(likeImage, for: .normal)
+        cell.delegate = self
+        cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
+        cell.setIsLiked(photo.isLiked)
     }
 }
 
@@ -91,7 +90,7 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
-        
+
         configCell(for: imageListCell, with: indexPath)
         
         return imageListCell
@@ -108,8 +107,8 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let singleImageShowController = SingleImageViewController()
         singleImageShowController.modalPresentationStyle = .overFullScreen
-        //let image = UIImage(named: photosName[indexPath.row])
-        //singleImageShowController.image = image
+        let imageUrl = URL(string: imageListService.photos[indexPath.row].largeImageURL)
+        singleImageShowController.imageUrl = imageUrl
         present(singleImageShowController, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -121,5 +120,19 @@ extension ImagesListViewController: UITableViewDelegate {
         height = imageSize.height * scale + 8
 
         return height
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = imageListService.photos[indexPath.row]
+        imageListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { result in
+            switch result {
+            case .success(let isLiked):
+                cell.setIsLiked(isLiked)
+            case .failure(_): break
+            }
+        }
     }
 }

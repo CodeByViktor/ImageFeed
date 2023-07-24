@@ -6,15 +6,18 @@
 //
 
 import UIKit
+import Kingfisher
+import ProgressHUD
 
 final class SingleImageViewController: BaseViewController {
-    var image: UIImage? {
-        didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
-        }
-    }
+//    var image: UIImage?// {
+//        didSet {
+//            guard isViewLoaded else { return }
+//            imageView.image = image
+//            rescaleAndCenterImageInScrollView(image: image)
+//        }
+//    }
+    var imageUrl: URL?
     
     private var scrollView = {
         let scrollView = UIScrollView()
@@ -36,7 +39,7 @@ final class SingleImageViewController: BaseViewController {
         button.setImage(UIImage(named: "Sharing"), for: .normal)
         return button
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,9 +54,10 @@ final class SingleImageViewController: BaseViewController {
         scrollView.delegate = self
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        imageView.image = image
         
-        rescaleAndCenterImageInScrollView(image: image)
+        if let imageUrl = imageUrl {
+            setImage(with: imageUrl)
+        }
     }
     private func addSubViews() {
         view.addPositioned(scrollView)
@@ -66,9 +70,27 @@ final class SingleImageViewController: BaseViewController {
         ])
     }
     
+    private func setImage(with url: URL) {
+        ProgressHUD.show()
+        imageView.kf.setImage(with: url) { [weak self] result in
+            guard let self = self else { return }
+            ProgressHUD.dismiss()
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.showError()
+            }
+        }
+    }
+    
+    private func showError() {
+        
+    }
+    
     @objc
-    func didTapShareButton() {
-        let sharingController = UIActivityViewController(activityItems: [image!], applicationActivities: nil)
+    private func didTapShareButton() {
+        let sharingController = UIActivityViewController(activityItems: [imageView.image!], applicationActivities: nil)
         self.present(sharingController, animated: true)
     }
     @objc

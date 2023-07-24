@@ -41,7 +41,8 @@
 		ABE4F1672A6BFC010034CD5A /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE4F1662A6BFC010034CD5A /* PhotoModel.swift */; };
 		ABE4F1692A6BFFEC0034CD5A /* PhotoResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE4F1682A6BFFEC0034CD5A /* PhotoResultModel.swift */; };
 		ABE4F16B2A6C00AF0034CD5A /* UrlsResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE4F16A2A6C00AF0034CD5A /* UrlsResultModel.swift */; };
-		ABE4F17A2A6E0CAE0034CD5A /* test.xib in Resources */ = {isa = PBXBuildFile; fileRef = ABE4F1792A6E0CAE0034CD5A /* test.xib */; };
+		ABE4F17E2A6F08940034CD5A /* PhotoLikeResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE4F17D2A6F08940034CD5A /* PhotoLikeResultModel.swift */; };
+		ABE4F1822A6F206D0034CD5A /* WebKitCookieCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABE4F1812A6F206D0034CD5A /* WebKitCookieCleaner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,7 +79,8 @@
 		ABE4F1662A6BFC010034CD5A /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
 		ABE4F1682A6BFFEC0034CD5A /* PhotoResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResultModel.swift; sourceTree = "<group>"; };
 		ABE4F16A2A6C00AF0034CD5A /* UrlsResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlsResultModel.swift; sourceTree = "<group>"; };
-		ABE4F1792A6E0CAE0034CD5A /* test.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = test.xib; sourceTree = "<group>"; };
+		ABE4F17D2A6F08940034CD5A /* PhotoLikeResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLikeResultModel.swift; sourceTree = "<group>"; };
+		ABE4F1812A6F206D0034CD5A /* WebKitCookieCleaner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebKitCookieCleaner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 				ABAAA6632A5B8876006A0643 /* UIBlockingProgressHUD.swift */,
 				ABAAA6752A65E64F006A0643 /* UIView.swift */,
 				ABAAA6772A66C6FF006A0643 /* UIColor+Extention.swift */,
+				ABE4F1812A6F206D0034CD5A /* WebKitCookieCleaner.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -175,7 +178,6 @@
 				AB5D813C2A23C84700C44E26 /* SceneDelegate.swift */,
 				AB5D81432A23C84800C44E26 /* Assets.xcassets */,
 				AB5D81452A23C84800C44E26 /* LaunchScreen.storyboard */,
-				ABE4F1792A6E0CAE0034CD5A /* test.xib */,
 				AB5D81482A23C84800C44E26 /* Info.plist */,
 			);
 			path = ImageFeed;
@@ -226,6 +228,7 @@
 				ABAAA6832A6AB9C1006A0643 /* UserResultModel.swift */,
 				ABE4F1662A6BFC010034CD5A /* PhotoModel.swift */,
 				ABE4F1682A6BFFEC0034CD5A /* PhotoResultModel.swift */,
+				ABE4F17D2A6F08940034CD5A /* PhotoLikeResultModel.swift */,
 				ABE4F16A2A6C00AF0034CD5A /* UrlsResultModel.swift */,
 			);
 			path = Models;
@@ -299,7 +302,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABE4F17A2A6E0CAE0034CD5A /* test.xib in Resources */,
 				AB5D81472A23C84800C44E26 /* LaunchScreen.storyboard in Resources */,
 				AB5D81442A23C84800C44E26 /* Assets.xcassets in Resources */,
 			);
@@ -320,6 +322,7 @@
 				AB3B89692A531516001CB768 /* OAuth2Service.swift in Sources */,
 				ABAAA6642A5B8876006A0643 /* UIBlockingProgressHUD.swift in Sources */,
 				AB5D81712A240DB000C44E26 /* ImagesListCell.swift in Sources */,
+				ABE4F1822A6F206D0034CD5A /* WebKitCookieCleaner.swift in Sources */,
 				ABAAA6782A66C6FF006A0643 /* UIColor+Extention.swift in Sources */,
 				AB5D91D52A33C0C300112AE9 /* ProfileViewController.swift in Sources */,
 				AB3B896B2A5315E5001CB768 /* OAuthTokenResponseBody.swift in Sources */,
@@ -334,6 +337,7 @@
 				AB3B895F2A52DBBD001CB768 /* AuthViewController.swift in Sources */,
 				AB04D4C42A4F6BAF005ED0A6 /* Constants.swift in Sources */,
 				AB3B89662A531138001CB768 /* URLSessionHelper.swift in Sources */,
+				ABE4F17E2A6F08940034CD5A /* PhotoLikeResultModel.swift in Sources */,
 				AB5D91D82A33DE3300112AE9 /* SingleImageViewController.swift in Sources */,
 				ABAAA6802A6AB96D006A0643 /* ProfileModel.swift in Sources */,
 				ABAAA6682A5DB9FC006A0643 /* ProfileImageService.swift in Sources */,

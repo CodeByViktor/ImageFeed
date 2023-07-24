@@ -20,12 +20,12 @@ final class ImageListService: ImageListSeviceProtocol {
     private var currentTask: URLSessionTask?
     
     func fetchPhotosNextPage() {
+        guard currentTask == nil else { return }
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
-        guard currentTask == nil, let token = token else { return }
-        var request = URLRequest.makeHTTPRequest(path: "/photos?page=\(nextPage)&order_by=latest")
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let request = URLRequest.photoListRequest(for: nextPage)
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self = self else {return}
+            self.currentTask = nil
             switch result {
             case .success(let photoList):
                 self.processPhotoList(photoList)
@@ -36,15 +36,29 @@ final class ImageListService: ImageListSeviceProtocol {
             case .failure(_):
                 break
             }
-            self.currentTask = nil
         }
         currentTask = task
         task.resume()
     }
     
-    func changeLike(photoId: String, isLike: Bool, _ comlition: @escaping (Result<Void, Error>) -> ()) {
-        var request = URLRequest.makeHTTPRequest(path: "/photos/\(photoId)/like")
-
+    func changeLike(photoId: String, isLike: Bool, _ comlition: @escaping (Result<Bool, Error>) -> ()) {
+        let request = URLRequest.photoLikeRequest(for: photoId, isLike: isLike)
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<PhotoLikeResult, Error>) in
+            guard let self = self else {return}
+            switch result {
+            case .success(let photoLikeResult):
+                if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                    //let photo = self.photos[index]
+                    let photoResult = photoLikeResult.photo
+                    let newPhoto = makePhotoFrom(photoResult)
+                    self.photos[index] = newPhoto
+                    comlition(.success(newPhoto.isLiked))
+                }
+            case .failure(let error):
+                comlition(.failure(error))
+            }
+        }
+        task.resume()
     }
     
     private func processPhotoList(_ photoList: [PhotoResult]) {
@@ -59,7 +73,7 @@ final class ImageListService: ImageListSeviceProtocol {
                      createdAt: photoResult.created_at,
                      welcomeDescription: photoResult.description,
                      thumbImageURL: photoResult.urls.thumb,
-                     largeImageURL: photoResult.urls.raw,
+                     largeImageURL: photoResult.urls.full,
                      isLiked: photoResult.liked_by_user)
     }
 }

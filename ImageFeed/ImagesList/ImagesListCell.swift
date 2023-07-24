@@ -8,8 +8,13 @@
 import UIKit
 import Kingfisher
 
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
+
 final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
+    weak var delegate: ImagesListCellDelegate?
     
     var bgImageView = {
         let bgImageView = UIImageView()
@@ -46,7 +51,11 @@ final class ImagesListCell: UITableViewCell {
         bgImageView.contentMode = .center
         bgImageView.kf.indicatorType = .activity
         
+        
         applyLabelGradient()
+        
+        bgImageView.isUserInteractionEnabled = true
+        likeButton.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
         
         hideDetails()
     }
@@ -76,6 +85,16 @@ final class ImagesListCell: UITableViewCell {
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint = CGPoint(x: 0.5, y: 0.54)
         layer.insertSublayer(gradient, at: 0)
+    }
+    
+    @objc
+    private func didTapLikeButton(_ sender: Any) {
+        delegate?.imageListCellDidTapLike(self)
+    }
+    
+    func setIsLiked(_ isLiked: Bool) {
+        let likeImage = isLiked ? UIImage(named: "Active") : UIImage(named: "No Active")
+        likeButton.setImage(likeImage, for: .normal)
     }
     
     func showDetails() {

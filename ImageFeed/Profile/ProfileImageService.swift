@@ -23,8 +23,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
         activeTask?.cancel()
         
         guard let token = OAuth2Service.shared.authToken else { return }
-        var request = URLRequest.makeHTTPRequest(path: "/users/\(username)")
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let request = URLRequest.profileImageRequest(for: username)
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
             switch result {

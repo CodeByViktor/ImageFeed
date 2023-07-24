@@ -124,6 +124,6 @@ final class ProfileViewController: BaseViewController {
     
     @objc
     private func logout(_ sender: Any) {
-        OAuth2TokenStorage.shared.resetToken()
+        OAuth2Service.shared.logout()
     }
 }
