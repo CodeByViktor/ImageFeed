@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
@@ -40,10 +41,26 @@ final class ImagesListCell: UITableViewCell {
         bgImageView.addPositioned(likeButton, left: nil, bottom: nil)
         bgImageView.addPositioned(bgLabel, top: nil, h: 30)
         bgLabel.addPositioned(dateLabel, top: nil, left: 8, bottom: -8, right: -8)
+        
+        bgImageView.backgroundColor = .ypWhiteAlpha50
+        bgImageView.contentMode = .center
+        bgImageView.kf.indicatorType = .activity
+        
         applyLabelGradient()
+        
+        hideDetails()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        bgImageView.kf.cancelDownloadTask()
+        
+        bgImageView.contentMode = .center
+        hideDetails()
     }
     
     private func applyLabelGradient() {
@@ -59,5 +76,15 @@ final class ImagesListCell: UITableViewCell {
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint = CGPoint(x: 0.5, y: 0.54)
         layer.insertSublayer(gradient, at: 0)
+    }
+    
+    func showDetails() {
+        bgImageView.contentMode = .scaleAspectFit
+        likeButton.isHidden = false
+        bgLabel.isHidden = false
+    }
+    func hideDetails() {
+        likeButton.isHidden = true
+        bgLabel.isHidden = true
     }
 }

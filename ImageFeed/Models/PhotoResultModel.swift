@@ -7,18 +7,14 @@
 
 import Foundation
 
-struct PhotoList: Decodable {
-    let items: [PhotoResult]
-}
-
 struct PhotoResult: Decodable {
     let id: String
     let width: Int
     let height: Int
-    let createdAt: Date?
+    let created_at: Date?
     let description: String?
     let urls: UrlsResult
-    let likedByUser: Bool
+    let liked_by_user: Bool
     
     var size: CGSize {
         return CGSize(width: width, height: height)

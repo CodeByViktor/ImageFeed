@@ -9,13 +9,15 @@ import UIKit
 
 class ImagesListViewController: BaseViewController {
 
+    private let imageListService = ImageListService()
+    private var showedPhotoCount = 0
+    
     private let tableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .ypBlack
         return tableView
     }()
     
-    private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -29,19 +31,49 @@ class ImagesListViewController: BaseViewController {
         view.addPositioned(tableView)
         
         tableView.separatorStyle = .none
+        tableView.rowHeight = 215
         tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         tableView.dataSource = self
         tableView.delegate = self
+        
+        NotificationCenter.default.addObserver(forName: ImageListService.DidChangeNotification,
+                                               object: nil, queue: .main) { [weak self] _ in
+            guard let self = self else {return}
+            self.updateTableViewAnimated()
+        }
+        
+        imageListService.fetchPhotosNextPage()
+    }
+    
+    private func updateTableViewAnimated() {
+        tableView.performBatchUpdates {
+            let newPhotoCount = imageListService.photos.count
+            if showedPhotoCount != newPhotoCount {
+                let indexPaths = (showedPhotoCount..<newPhotoCount).map { i in
+                    IndexPath(row: i, section: 0)
+                }
+                showedPhotoCount = newPhotoCount
+                self.tableView.insertRows(at: indexPaths, with: .automatic)
+            }
+        }
     }
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
+        let photo = imageListService.photos[indexPath.row]
+        guard let imageUrl = URL(string: photo.thumbImageURL) else {
             return
         }
         
-        cell.bgImageView.image = image
-        cell.dateLabel.text = dateFormatter.string(from: Date())
+        cell.bgImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "Stub")) { result in
+            switch result {
+            case .success(_):
+                cell.showDetails()
+            case .failure: break
+            }
+        }
+
+        cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
         
         let likeImage = indexPath.row % 2 == 0 ? UIImage(named: "Active") : UIImage(named: "No Active")
         cell.likeButton.setImage(likeImage, for: .normal)
@@ -50,7 +82,7 @@ class ImagesListViewController: BaseViewController {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosName.count
+        return imageListService.photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -64,26 +96,30 @@ extension ImagesListViewController: UITableViewDataSource {
         
         return imageListCell
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 != imageListService.photos.count { return }
+        
+        imageListService.fetchPhotosNextPage()
+    }
 }
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let singleImageShowController = SingleImageViewController()
         singleImageShowController.modalPresentationStyle = .overFullScreen
-        let image = UIImage(named: photosName[indexPath.row])
-        singleImageShowController.image = image
+        //let image = UIImage(named: photosName[indexPath.row])
+        //singleImageShowController.image = image
         present(singleImageShowController, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let height: CGFloat
 
-        guard let imageSize = UIImage(named: photosName[indexPath.row])?.size else {
-            return 0
-        }
+        let imageSize = imageListService.photos[indexPath.row].size
         
         let scale = (tableView.bounds.width - 32) / imageSize.width
         height = imageSize.height * scale + 8
-        
+
         return height
     }
 }
