@@ -44,8 +44,6 @@ class ImagesListViewController: BaseViewController {
         }
         
         imageListService.fetchPhotosNextPage()
-        
-        UIBlockingProgressHUD.show()
     }
     
     private func updateTableViewAnimated() {
