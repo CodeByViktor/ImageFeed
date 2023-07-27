@@ -79,6 +79,22 @@ class ImagesListViewController: BaseViewController {
     }
 }
 
+//MARK: Show errors
+extension ImagesListViewController {
+    private func showError() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Попробуйте еще раз",
+            preferredStyle: .alert
+        )
+        
+        let action = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: nil)
+    }
+}
+
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return imageListService.photos.count
@@ -125,14 +141,18 @@ extension ImagesListViewController: UITableViewDelegate {
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        UIBlockingProgressHUD.show()
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let photo = imageListService.photos[indexPath.row]
-        imageListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { result in
+        imageListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let isLiked):
                 cell.setIsLiked(isLiked)
-            case .failure(_): break
+            case .failure(_):
+                self.showError()
             }
+            UIBlockingProgressHUD.hide()
         }
     }
 }

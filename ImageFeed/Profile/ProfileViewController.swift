@@ -124,6 +124,17 @@ final class ProfileViewController: BaseViewController {
     
     @objc
     private func logout(_ sender: Any) {
-        OAuth2Service.shared.logout()
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Да", style: .default, handler: { _ in
+            OAuth2Service.shared.logout()
+        }))
+        alert.addAction(UIAlertAction(title: "Нет", style: .default))
+        
+        present(alert, animated: true, completion: nil)
     }
 }

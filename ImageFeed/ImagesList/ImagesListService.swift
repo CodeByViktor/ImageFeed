@@ -44,11 +44,10 @@ final class ImageListService: ImageListSeviceProtocol {
     func changeLike(photoId: String, isLike: Bool, _ comlition: @escaping (Result<Bool, Error>) -> ()) {
         let request = URLRequest.photoLikeRequest(for: photoId, isLike: isLike)
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<PhotoLikeResult, Error>) in
-            guard let self = self else {return}
+            guard let self = self else { return }
             switch result {
             case .success(let photoLikeResult):
                 if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
-                    //let photo = self.photos[index]
                     let photoResult = photoLikeResult.photo
                     let newPhoto = makePhotoFrom(photoResult)
                     self.photos[index] = newPhoto

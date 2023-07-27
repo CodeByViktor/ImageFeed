@@ -10,13 +10,6 @@ import Kingfisher
 import ProgressHUD
 
 final class SingleImageViewController: BaseViewController {
-//    var image: UIImage?// {
-//        didSet {
-//            guard isViewLoaded else { return }
-//            imageView.image = image
-//            rescaleAndCenterImageInScrollView(image: image)
-//        }
-//    }
     var imageUrl: URL?
     
     private var scrollView = {
@@ -55,9 +48,7 @@ final class SingleImageViewController: BaseViewController {
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         
-        if let imageUrl = imageUrl {
-            setImage(with: imageUrl)
-        }
+        setImage(with: imageUrl)
     }
     private func addSubViews() {
         view.addPositioned(scrollView)
@@ -70,7 +61,8 @@ final class SingleImageViewController: BaseViewController {
         ])
     }
     
-    private func setImage(with url: URL) {
+    private func setImage(with url: URL?) {
+        guard let imageUrl = imageUrl else { return }
         ProgressHUD.show()
         imageView.kf.setImage(with: url) { [weak self] result in
             guard let self = self else { return }
@@ -85,7 +77,19 @@ final class SingleImageViewController: BaseViewController {
     }
     
     private func showError() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Попробовать ещё раз?",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] _ in
+            guard let self = self else {return}
+            self.setImage(with: imageUrl)
+        }))
+        alert.addAction(UIAlertAction(title: "Не надо", style: .default))
         
+        present(alert, animated: true, completion: nil)
     }
     
     @objc
