@@ -16,8 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         ProgressHUD.animationType = .systemActivityIndicator
-        ProgressHUD.colorHUD = .black
+        ProgressHUD.colorHUD = .ypWhite
         ProgressHUD.colorAnimation = .lightGray
+        ProgressHUD.mediaSize = 25
+        ProgressHUD.marginSize = 13
         return true
     }
 
