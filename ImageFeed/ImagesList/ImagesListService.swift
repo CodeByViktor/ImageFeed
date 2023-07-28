@@ -13,7 +13,7 @@ protocol ImageListSeviceProtocol {
 }
 
 final class ImageListService: ImageListSeviceProtocol {
-    static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
+    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     private var token = OAuth2TokenStorage.shared.token
     private (set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
@@ -21,7 +21,7 @@ final class ImageListService: ImageListSeviceProtocol {
     
     func fetchPhotosNextPage() {
         guard currentTask == nil else { return }
-        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
+        let nextPage = (lastLoadedPage ?? 0) + 1
         let request = URLRequest.photoListRequest(for: nextPage)
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self = self else {return}
@@ -29,7 +29,7 @@ final class ImageListService: ImageListSeviceProtocol {
             switch result {
             case .success(let photoList):
                 self.processPhotoList(photoList)
-                NotificationCenter.default.post(name: ImageListService.DidChangeNotification,
+                NotificationCenter.default.post(name: ImageListService.didChangeNotification,
                                                 object: self)
                 self.lastLoadedPage = nextPage
                 break
@@ -69,10 +69,10 @@ final class ImageListService: ImageListSeviceProtocol {
     private func makePhotoFrom(_ photoResult: PhotoResult) -> Photo {
         return Photo(id: photoResult.id,
                      size: photoResult.size,
-                     createdAt: photoResult.created_at,
+                     createdAt: photoResult.createdAt,
                      welcomeDescription: photoResult.description,
                      thumbImageURL: photoResult.urls.thumb,
                      largeImageURL: photoResult.urls.full,
-                     isLiked: photoResult.liked_by_user)
+                     isLiked: photoResult.likedByUser)
     }
 }

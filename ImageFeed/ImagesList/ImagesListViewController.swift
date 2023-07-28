@@ -20,8 +20,8 @@ class ImagesListViewController: BaseViewController {
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
+        formatter.dateFormat = "dd MMMM yyyy"
+        formatter.locale = Locale(identifier: "ru_RU")
         return formatter
     }()
     
@@ -37,7 +37,7 @@ class ImagesListViewController: BaseViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        NotificationCenter.default.addObserver(forName: ImageListService.DidChangeNotification,
+        NotificationCenter.default.addObserver(forName: ImageListService.didChangeNotification,
                                                object: nil, queue: .main) { [weak self] _ in
             guard let self = self else {return}
             self.updateTableViewAnimated()
@@ -74,7 +74,12 @@ class ImagesListViewController: BaseViewController {
         }
         
         cell.delegate = self
-        cell.dateLabel.text = dateFormatter.string(from: photo.createdAt ?? Date())
+        
+        var dateText = ""
+        if let createdDate = photo.createdAt {
+            dateText = dateFormatter.string(from: createdDate)
+        }
+        cell.dateLabel.text = dateText
         cell.setIsLiked(photo.isLiked)
     }
 }

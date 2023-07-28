@@ -71,7 +71,7 @@ final class ProfileViewController: BaseViewController {
         guard let profile = profileService.profile else { return }
         updateUI(with: profile)
         
-        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.DidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
             guard let self = self else { return }
             self.updateAvatar()
         }

@@ -14,7 +14,7 @@ protocol ProfileImageServiceProtocol {
 
 final class ProfileImageService: ProfileImageServiceProtocol {
     static let shared = ProfileImageService()
-    static let DidChangeNotification = Notification.Name("ProfileImageProviderDidChange")
+    static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
     private(set) var avatarURL: String?
     private var activeTask: URLSessionTask?
@@ -30,7 +30,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
             case .success(let userResult):
                 self.avatarURL = userResult.smallImage
                 completion(.success(self.avatarURL!))
-                NotificationCenter.default.post(name: ProfileImageService.DidChangeNotification,
+                NotificationCenter.default.post(name: ProfileImageService.didChangeNotification,
                                                 object: self,
                                                 userInfo: ["URL": self.avatarURL!])
                 break

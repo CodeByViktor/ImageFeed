@@ -11,7 +11,7 @@ extension URLRequest {
     fileprivate static func makeHTTPRequest(
             path: String,
             httpMethod: String = "GET",
-            baseURL: URL = DefaultBaseURL
+            baseURL: URL = gDefaultBaseURL
         ) -> URLRequest {
             var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
             request.httpMethod = httpMethod
@@ -27,9 +27,9 @@ extension URLRequest {
     static func authTokenRequest(code: String) -> URLRequest {
         return makeHTTPRequest(
             path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURI)"
+            + "?client_id=\(gAccessKey)"
+            + "&&client_secret=\(gSecretKey)"
+            + "&&redirect_uri=\(gRedirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
