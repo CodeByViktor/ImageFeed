@@ -22,8 +22,7 @@ final class ProfileService: ProfileServiceProtocol {
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> ()) {
         activeTask?.cancel()
         
-        var request = URLRequest.makeHTTPRequest(path: "/me")
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let request = URLRequest.profileRequest()
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
             switch result {

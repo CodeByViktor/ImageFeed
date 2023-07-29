@@ -58,12 +58,12 @@ final class WebViewViewController: UIViewController {
         
         webView.navigationDelegate = self
         
-        var urlComponents = URLComponents(string: AuthUrl)!
+        var urlComponents = URLComponents(string: gAuthUrl)!
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: AccessKey),
-            URLQueryItem(name: "redirect_uri", value: RedirectURI),
+            URLQueryItem(name: "client_id", value: gAccessKey),
+            URLQueryItem(name: "redirect_uri", value: gRedirectURI),
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: AccessScope)
+            URLQueryItem(name: "scope", value: gAccessScope)
         ]
         
         let url = urlComponents.url!

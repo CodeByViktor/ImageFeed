@@ -13,4 +13,5 @@ extension UIColor {
     static var ypBackground: UIColor { UIColor(named: "YP Background (iOS)") ?? UIColor.darkGray }
     static var ypRed: UIColor { UIColor(named: "YP Red") ?? UIColor.red }
     static var ypWhite: UIColor { UIColor(named: "YP White") ?? UIColor.white }
+    static var ypWhiteAlpha50: UIColor { UIColor(named: "YP White (Alpha 50)") ?? UIColor.white.withAlphaComponent(0.5) }
 }

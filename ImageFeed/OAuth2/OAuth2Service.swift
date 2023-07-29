@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import WebKit
 
 final class OAuth2Service {
     static let shared = OAuth2Service()
@@ -32,7 +33,7 @@ final class OAuth2Service {
         activeTask?.cancel()
         lastCode = code
         
-        let request = authTokenRequest(code: code)
+        let request = URLRequest.authTokenRequest(code: code)
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self = self else { return }
             switch result {
@@ -49,19 +50,12 @@ final class OAuth2Service {
         activeTask = task
         task.resume()
     }
-}
-
-extension OAuth2Service {
-    private func authTokenRequest(code: String) -> URLRequest {
-        return URLRequest.makeHTTPRequest(
-            path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURI)"
-            + "&&code=\(code)"
-            + "&&grant_type=authorization_code",
-            httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!
-        )
+    
+    func logout() {
+        OAuth2TokenStorage.shared.resetToken()
+        WebKitCookieCleaner.clean()
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        let splashScreenController = SplashScreenViewController()
+        window.rootViewController = splashScreenController
     }
 }

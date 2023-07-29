@@ -71,7 +71,7 @@ final class ProfileViewController: BaseViewController {
         guard let profile = profileService.profile else { return }
         updateUI(with: profile)
         
-        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.DidChangeNotification, object: nil, queue: .main) { [weak self] _ in
+        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
             guard let self = self else { return }
             self.updateAvatar()
         }
@@ -124,6 +124,17 @@ final class ProfileViewController: BaseViewController {
     
     @objc
     private func logout(_ sender: Any) {
-        OAuth2TokenStorage.shared.resetToken()
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Да", style: .default, handler: { _ in
+            OAuth2Service.shared.logout()
+        }))
+        alert.addAction(UIAlertAction(title: "Нет", style: .default))
+        
+        present(alert, animated: true, completion: nil)
     }
 }
