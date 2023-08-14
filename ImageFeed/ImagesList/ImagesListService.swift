@@ -10,6 +10,7 @@ import Foundation
 protocol ImageListSeviceProtocol {
     var photos: [Photo] { get }
     func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, _ comlition: @escaping (Result<Bool, Error>) -> ())
 }
 
 final class ImageListService: ImageListSeviceProtocol {
