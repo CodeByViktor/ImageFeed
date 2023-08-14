@@ -8,11 +8,15 @@
 import UIKit
 import Kingfisher
 
+protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func updateUI(with profile: Profile)
+    func updateAvatar(with url: URL)
+}
 
 //MARK: Class
-final class ProfileViewController: BaseViewController {
-    private let profileService: ProfileServiceProtocol = ProfileService.shared
-    private var profileImageServiceObserver: NSObjectProtocol?
+final class ProfileViewController: BaseViewController & ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol?
     
     // MARK: UI el
     private let avatarView = {
@@ -68,29 +72,18 @@ final class ProfileViewController: BaseViewController {
         addSubViews()
         applyConstraints()
         
-        guard let profile = profileService.profile else { return }
-        updateUI(with: profile)
-        
-        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
-            guard let self = self else { return }
-            self.updateAvatar()
-        }
-        updateAvatar()
+        presenter?.viewDidLoad()
     }
     
-    private func updateUI(with profile: Profile) {
+    func updateUI(with profile: Profile) {
         nameLabel.text = profile.name
         linkLabel.text = profile.loginName
         descLabel.text = profile.bio
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImage = ProfileImageService.shared.avatarURL,
-            let imageURL = URL(string: profileImage)
-        else { return }
+    func updateAvatar(with url: URL) {
         let imageProcessor = RoundCornerImageProcessor(cornerRadius: 60)
-        avatarView.kf.setImage(with: imageURL,
+        avatarView.kf.setImage(with: url,
                                placeholder: UIImage(named: "person.crop.circle.fill"),
                                options: [.processor(imageProcessor)])
     }

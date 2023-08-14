@@ -9,7 +9,7 @@ import Foundation
 
 final class WebViewPresenterSpy: WebViewPresenterProtocol {
     var testVar: Bool = false
-    var view: WebViewViewControllerProtocol?
+    weak var view: WebViewViewControllerProtocol?
     
     func viewDidLoad() {
         testVar = true
