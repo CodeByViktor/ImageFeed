@@ -16,7 +16,7 @@ protocol ImageListPresenterProtocol {
 }
 
 final class ImageListPresenter: ImageListPresenterProtocol {
-    var view: ImagesListViewControllerProtocol?
+    weak var view: ImagesListViewControllerProtocol?
     var imageListService: ImageListSeviceProtocol
     private var showedPhotoCount = 0
     
