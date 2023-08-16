@@ -21,13 +21,6 @@ class ImagesListViewController: BaseViewController & ImagesListViewControllerPro
         return tableView
     }()
     
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMMM yyyy"
-        formatter.locale = Locale(identifier: "ru_RU")
-        return formatter
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
@@ -47,28 +40,6 @@ class ImagesListViewController: BaseViewController & ImagesListViewControllerPro
         tableView.performBatchUpdates {
             self.tableView.insertRows(at: indexPaths, with: .automatic)
         }
-    }
-    
-    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let photo = presenter?.getPhotos()[indexPath.row],
-              let imageUrl = URL(string: photo.thumbImageURL) else { return }
-        
-        cell.bgImageView.kf.setImage(with: imageUrl, placeholder: UIImage(named: "Stub")) { result in
-            switch result {
-            case .success(_):
-                cell.showDetails()
-            case .failure: break
-            }
-        }
-        
-        cell.delegate = self
-        
-        var dateText = ""
-        if let createdDate = photo.createdAt {
-            dateText = dateFormatter.string(from: createdDate)
-        }
-        cell.dateLabel.text = dateText
-        cell.setIsLiked(photo.isLiked)
     }
 }
 
@@ -90,24 +61,27 @@ extension ImagesListViewController {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter?.getPhotos().count ?? 0
+        return presenter?.getPhotosCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
         
-        guard let imageListCell = cell as? ImagesListCell else {
+        guard let imageListCell = cell as? ImagesListCell,
+              let cellModel = presenter?.getCellInfo(by: indexPath)
+        else {
             return UITableViewCell()
         }
-
-        configCell(for: imageListCell, with: indexPath)
+        
+        imageListCell.delegate = self
+        imageListCell.setup(from: cellModel)
         
         return imageListCell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let presenter = presenter else { return }
-        if indexPath.row + 1 != presenter.getPhotos().count { return }
+        if indexPath.row + 1 != presenter.getPhotosCount() { return }
         
         presenter.loadNextPage()
     }
@@ -118,7 +92,7 @@ extension ImagesListViewController: UITableViewDelegate {
         guard let presenter = presenter else { return }
         let singleImageShowController = SingleImageViewController()
         singleImageShowController.modalPresentationStyle = .overFullScreen
-        let imageUrl = URL(string: presenter.getPhotos()[indexPath.row].largeImageURL)
+        let imageUrl = URL(string: presenter.getPhoto(by: indexPath).largeImageURL)
         singleImageShowController.imageUrl = imageUrl
         present(singleImageShowController, animated: true)
     }
@@ -126,7 +100,7 @@ extension ImagesListViewController: UITableViewDelegate {
         guard let presenter = presenter else { return 0 }
         let height: CGFloat
 
-        let imageSize = presenter.getPhotos()[indexPath.row].size
+        let imageSize = presenter.getPhoto(by: indexPath).size
         
         let scale = (tableView.bounds.width - 32) / imageSize.width
         height = imageSize.height * scale + 8
@@ -138,8 +112,9 @@ extension ImagesListViewController: UITableViewDelegate {
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         UIBlockingProgressHUD.show()
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        guard let photo = presenter?.getPhotos()[indexPath.row] else { return }
+        guard let indexPath = tableView.indexPath(for: cell),
+              let photo = presenter?.getPhoto(by: indexPath)
+        else { return }
         presenter?.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
             guard let self = self else { return }
             switch result {

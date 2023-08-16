@@ -111,4 +111,16 @@ final class ImagesListCell: UITableViewCell {
         likeButton.isHidden = true
         bgLabel.isHidden = true
     }
+    func setup(from cellModel: ImagesListCellModel) {
+        bgImageView.kf.setImage(with: cellModel.url, placeholder: UIImage(named: "Stub")) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(_):
+                self.showDetails()
+            case .failure: break
+            }
+        }
+        dateLabel.text = cellModel.dateString
+        setIsLiked(cellModel.isLiked)
+    }
 }

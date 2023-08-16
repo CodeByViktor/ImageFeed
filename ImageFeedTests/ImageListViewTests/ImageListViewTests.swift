@@ -25,6 +25,6 @@ final class ImageListViewTests: XCTestCase {
         
         presenter.loadNextPage()
         
-        XCTAssertEqual(presenter.getPhotos().count, 10)
+        XCTAssertEqual(presenter.getPhotosCount(), 10)
     }
 }

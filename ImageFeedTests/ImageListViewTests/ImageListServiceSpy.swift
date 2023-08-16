@@ -5,6 +5,7 @@
 //  Created by Виктор on 16.08.2023.
 //
 
+@testable import ImageFeed
 import Foundation
 
 final class ImageListServiceSpy: ImageListSeviceProtocol {

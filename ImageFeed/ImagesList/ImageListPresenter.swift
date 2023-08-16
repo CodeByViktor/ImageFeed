@@ -11,14 +11,23 @@ protocol ImageListPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
     func viewDidLoad()
     func loadNextPage()
-    func getPhotos() -> [Photo]
+    func getPhoto(by indexPath: IndexPath) -> Photo
+    func getPhotosCount() -> Int
     func changeLike(photoId: String, isLike: Bool, _ comlition: @escaping (Result<Bool, Error>) -> ())
+    func getCellInfo(by indexPath: IndexPath) -> ImagesListCellModel?
 }
 
 final class ImageListPresenter: ImageListPresenterProtocol {
     weak var view: ImagesListViewControllerProtocol?
     var imageListService: ImageListSeviceProtocol
     private var showedPhotoCount = 0
+    
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMMM yyyy"
+        formatter.locale = Locale(identifier: "ru_RU")
+        return formatter
+    }()
     
     init(imageListService: ImageListSeviceProtocol) {
         self.imageListService = imageListService
@@ -33,8 +42,27 @@ final class ImageListPresenter: ImageListPresenterProtocol {
         imageListService.fetchPhotosNextPage()
     }
     
-    func getPhotos() -> [Photo] {
-        return imageListService.photos
+    func getPhotosCount() -> Int {
+        return imageListService.photos.count
+    }
+    
+    func getPhoto(by indexPath: IndexPath) -> Photo {
+       return imageListService.photos[indexPath.row]
+    }
+    
+    func getCellInfo(by indexPath: IndexPath) -> ImagesListCellModel? {
+        let photo = getPhoto(by: indexPath)
+        guard let imageUrl = URL(string: photo.thumbImageURL) else {
+            return nil
+        }
+        
+        var dateString = ""
+        if let createdDate = photo.createdAt {
+            dateString = dateFormatter.string(from: createdDate)
+        }
+        return ImagesListCellModel(url: imageUrl,
+                                   dateString: dateString,
+                                   isLiked: photo.isLiked)
     }
     
     func changeLike(photoId: String, isLike: Bool, _ comlition: @escaping (Result<Bool, Error>) -> ()) {
