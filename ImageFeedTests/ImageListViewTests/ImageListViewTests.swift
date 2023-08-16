@@ -27,4 +27,28 @@ final class ImageListViewTests: XCTestCase {
         
         XCTAssertEqual(presenter.getPhotosCount(), 10)
     }
+    
+    func testPresenterGetPhoto() throws {
+        let imageService = ImageListServiceSpy()
+        let presenter = ImageListPresenter(imageListService: imageService)
+        
+        presenter.loadNextPage()
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+        let photo = presenter.getPhoto(by: indexPath)
+        
+        XCTAssertEqual(photo.id, "0")
+    }
+    
+    func testPresenterGetCellInfo() throws {
+        let imageService = ImageListServiceSpy()
+        let presenter = ImageListPresenter(imageListService: imageService)
+        
+        presenter.loadNextPage()
+        
+        let indexPath = IndexPath(row: 0, section: 0)
+        let cellInfo = presenter.getCellInfo(by: indexPath)
+        
+        XCTAssertNotNil(cellInfo)
+    }
 }

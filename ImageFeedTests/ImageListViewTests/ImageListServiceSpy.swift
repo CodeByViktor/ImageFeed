@@ -12,8 +12,8 @@ final class ImageListServiceSpy: ImageListSeviceProtocol {
     var photos: [Photo] = []
     
     func fetchPhotosNextPage() {
-        for _ in 0...9 {
-            photos.append(Photo(id: "test", size: CGSize(), createdAt: Date(), welcomeDescription: nil, thumbImageURL: "test", largeImageURL: "test", isLiked: false))
+        for i in 0...9 {
+            photos.append(Photo(id: "\(i)", size: CGSize(), createdAt: Date(), welcomeDescription: nil, thumbImageURL: "test", largeImageURL: "test", isLiked: false))
         }
     }
     
