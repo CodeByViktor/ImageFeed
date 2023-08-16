@@ -99,6 +99,7 @@ final class SingleImageViewController: BaseViewController {
     }
     @objc
     private func didTapBackButton() {
+        ProgressHUD.dismiss()
         dismiss(animated: true)
     }
 }

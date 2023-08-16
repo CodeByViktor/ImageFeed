@@ -119,7 +119,6 @@ extension ImagesListViewController: ImagesListCellDelegate {
             guard let self = self else { return }
             switch result {
             case .success(let isLiked):
-                print(isLiked)
                 cell.setIsLiked(isLiked)
             case .failure(_):
                 self.showError()
