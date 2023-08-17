@@ -25,14 +25,10 @@ final class ImageListPresenterSpy: ImageListPresenterProtocol {
         imageListService.fetchPhotosNextPage()
     }
     
-    func getPhotos() -> [Photo] {
-        return imageListService.photos
-    }
-    
     func changeLike(photoId: String, isLike: Bool, _ comlition: @escaping (Result<Bool, Error>) -> ()) {
     }
-    func getPhoto(by indexPath: IndexPath) -> ImageFeed.Photo {
-        return imageListService.photos[indexPath.row]
+    func getPhoto(by indexPath: IndexPath) -> Photo? {
+        return imageListService.photos[safe: indexPath.row]
     }
     
     func getPhotosCount() -> Int {

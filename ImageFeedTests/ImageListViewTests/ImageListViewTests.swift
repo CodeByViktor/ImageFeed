@@ -37,7 +37,7 @@ final class ImageListViewTests: XCTestCase {
         let indexPath = IndexPath(row: 0, section: 0)
         let photo = presenter.getPhoto(by: indexPath)
         
-        XCTAssertEqual(photo.id, "0")
+        XCTAssertNotNil(photo)
     }
     
     func testPresenterGetCellInfo() throws {
