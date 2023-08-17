@@ -19,6 +19,7 @@ final class AuthViewController: BaseViewController {
     }()
     private let loginButton = {
         let button = UIButton()
+        button.accessibilityIdentifier = "Authenticate"
         button.setTitle("Войти", for: .normal)
         button.backgroundColor = UIColor(named: "YP White")
         button.setTitleColor(UIColor(named: "YP Black"), for: .normal)

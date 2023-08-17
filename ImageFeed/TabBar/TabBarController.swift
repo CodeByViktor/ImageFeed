@@ -16,6 +16,7 @@ final class TabBarController: UITabBarController {
         tabBar.standardAppearance = appearence
         tabBar.tintColor = .ypWhite
         
+        // Setup imagelist vc
         let imagesListViewController = ImagesListViewController()
         let imagesListService = ImageListService()
         let imagesListPresenter = ImageListPresenter(imageListService: imagesListService)
@@ -33,6 +34,8 @@ final class TabBarController: UITabBarController {
         profileViewController.tabBarItem = UITabBarItem(title: nil,
                                                         image: UIImage(named: "tab_profile_active"),
                                                         selectedImage: nil)
+        profileViewController.tabBarItem.accessibilityIdentifier = "profileTabBarIdentifier"
+        
         imagesListViewController.tabBarItem = UITabBarItem(title: nil,
                                                            image: UIImage(named: "tab_editorial_active"),
                                                            selectedImage: nil)

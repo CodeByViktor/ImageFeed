@@ -89,18 +89,24 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let presenter = presenter else { return }
+        guard let presenter = presenter,
+              let photo = presenter.getPhoto(by: indexPath)
+        else { return }
+        
         let singleImageShowController = SingleImageViewController()
         singleImageShowController.modalPresentationStyle = .overFullScreen
-        let imageUrl = URL(string: presenter.getPhoto(by: indexPath).largeImageURL)
+        let imageUrl = URL(string: photo.largeImageURL)
         singleImageShowController.imageUrl = imageUrl
         present(singleImageShowController, animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let presenter = presenter else { return 0 }
+        guard let presenter = presenter,
+              let photo = presenter.getPhoto(by: indexPath)
+        else { return 0 }
+        
         let height: CGFloat
 
-        let imageSize = presenter.getPhoto(by: indexPath).size
+        let imageSize = photo.size
         
         let scale = (tableView.bounds.width - 32) / imageSize.width
         height = imageSize.height * scale + 8

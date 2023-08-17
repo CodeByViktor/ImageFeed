@@ -24,6 +24,7 @@ final class ImagesListCell: UITableViewCell {
     }()
     var likeButton = {
         let likeButton = UIButton()
+        likeButton.accessibilityIdentifier = "likeButtonIdentifier"
         return likeButton
     }()
     var dateLabel = {

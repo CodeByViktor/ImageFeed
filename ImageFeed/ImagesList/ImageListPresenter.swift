@@ -11,7 +11,7 @@ protocol ImageListPresenterProtocol {
     var view: ImagesListViewControllerProtocol? { get set }
     func viewDidLoad()
     func loadNextPage()
-    func getPhoto(by indexPath: IndexPath) -> Photo
+    func getPhoto(by indexPath: IndexPath) -> Photo?
     func getPhotosCount() -> Int
     func changeLike(photoId: String, isLike: Bool, _ comlition: @escaping (Result<Bool, Error>) -> ())
     func getCellInfo(by indexPath: IndexPath) -> ImagesListCellModel?
@@ -46,13 +46,13 @@ final class ImageListPresenter: ImageListPresenterProtocol {
         return imageListService.photos.count
     }
     
-    func getPhoto(by indexPath: IndexPath) -> Photo {
-       return imageListService.photos[indexPath.row]
+    func getPhoto(by indexPath: IndexPath) -> Photo? {
+        return imageListService.photos[safe: indexPath.row]
     }
     
     func getCellInfo(by indexPath: IndexPath) -> ImagesListCellModel? {
-        let photo = getPhoto(by: indexPath)
-        guard let imageUrl = URL(string: photo.thumbImageURL) else {
+        guard let photo = getPhoto(by: indexPath),
+              let imageUrl = URL(string: photo.thumbImageURL) else {
             return nil
         }
         

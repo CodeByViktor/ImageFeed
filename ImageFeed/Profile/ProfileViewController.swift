@@ -30,6 +30,7 @@ final class ProfileViewController: BaseViewController & ProfileViewControllerPro
         let button = UIButton.systemButton(with: exitButtonImage!,
                                            target: nil,
                                            action: nil)
+        button.accessibilityIdentifier = "logoutButtonIdentifier"
         button.tintColor = UIColor(named: "YP Red")
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -37,6 +38,7 @@ final class ProfileViewController: BaseViewController & ProfileViewControllerPro
     
     private let nameLabel = {
         let nameLabel = UILabel()
+        nameLabel.accessibilityIdentifier = "nameLabelIdentifier"
         nameLabel.text = "Екатерина Новикова"
         nameLabel.font = UIFont.boldSystemFont(ofSize: 23)
         nameLabel.textColor = UIColor(named: "YP White")
@@ -46,6 +48,7 @@ final class ProfileViewController: BaseViewController & ProfileViewControllerPro
     
     private let linkLabel = {
         let linkLabel = UILabel()
+        linkLabel.accessibilityIdentifier = "linkLabelIdentifier"
         linkLabel.text = "@ekaterina_nov"
         linkLabel.font = UIFont.systemFont(ofSize: 13)
         linkLabel.textColor = UIColor(named: "YP Grey")

@@ -22,6 +22,7 @@ final class SingleImageViewController: BaseViewController {
     }()
     private var backButton = {
         let button = UIButton()
+        button.accessibilityIdentifier = "backButtonIdentifier"
         button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
         button.tintColor = UIColor(named: "YP White")
         return button
